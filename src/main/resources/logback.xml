@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 监听配置文件的变化 -->
+<configuration scan="true" scanPeriod="5 minutes" >
+    <!-- 主机名  -->
+    <contextName>orm-mini</contextName>
+    <property name="APP_NAME" value="app-dc" />
+    <property name="logs.dir" value="logs"/>
+
+    <!-- 控制台输出 -->
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                <!-- 时间戳|主机名|日志级别|模块名|类名|线程名|方法名|行号|日志内容 -->
+                <pattern>
+                    %d{yyyy-MM-dd HH:mm:ss.SSS}|%contextName|%level|${APP_NAME}|%class|%thread|%method|%line|%msg%n
+                </pattern>
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- 按照每天生成日志文件 -->
+    <appender name="dailyfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logs.dir}/${APP_NAME}.log</file>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS}|%contextName|%level|${APP_NAME}|%class|%thread|%method|%line|%msg%n
+            </pattern>
+        </encoder>
+        <!-- 最多保留7个归档日志文件 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${logs.dir}/${APP_NAME}.%i.log</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>7</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy  class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <!-- 文件大小触发重写新文件 -->
+            <MaxFileSize>50MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+
+
+    <!-- all,debug,info,warn,error -->
+    <root>
+        <level value="ERROR" />
+        <appender-ref ref="stdout" />
+        <appender-ref ref="dailyfile" />
+    </root>
+
+    <logger name="com.alexlee" level="DEBUG" />
+    <logger name="org.springframework" level="INFO" />
+</configuration>

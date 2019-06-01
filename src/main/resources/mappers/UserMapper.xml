@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MyMapper namespace="com.alexlee.orm.mapper.UserMapper" entityClass="com.alexlee.orm.entity.User">
+    <insert id="insert">
+        insert into user(id,name,age) values(#{id},#{name},#{age})
+    </insert>
+    <select id="selectAll">
+        select * from user
+    </select>
+    <select id="selectByUser">
+        select * from user where 1=1
+            and id=#{id}
+            and name=#{name}
+            and age=#{age}
+    </select>
+    <update id="update">
+        update user
+        set name=#{name},age=#{age}
+        where id=#{id}
+    </update>
+    <delete id="delete">
+        delete from user where
+        id=#{id}
+    </delete>
+
+</MyMapper>
